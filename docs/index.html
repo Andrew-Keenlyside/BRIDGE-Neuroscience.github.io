@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BRIDGE | Multi-scale Connectomics</title>
-    <meta name="description" content="Distributed spatial graph framework for whole-brain structural connectivity from high-resolution 3D imaging, with outputs stored in the open Zarr Vectors format">
+    <meta name="description" content="Whole-brain structural connectivity from high-resolution 3D imaging, with results stored in the open Zarr Vectors format">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/bridge_brain_icon.ico">
@@ -38,14 +38,11 @@
             </div>
             
             <p class="hero-tagline">
-                Distributed spatial graphs for terabyte-scale connectomics, stored as open Zarr Vectors
+                Whole-brain connectivity at terabyte scale, stored as open Zarr Vectors
             </p>
             
             <div class="hero-buttons">
-                <a href="https://bridge-documentation.readthedocs.io/en/latest/" class="btn btn-primary">
-                    Documentation
-                </a>
-                <a href="#zarr-vectors" class="btn btn-secondary">
+                <a href="#zarr-vectors" class="btn btn-primary">
                     Zarr Vectors
                 </a>
                 <a href="https://github.com/BRIDGE-Neuroscience" class="btn btn-secondary">
@@ -67,100 +64,16 @@
             </div>
             <div class="about-content">
                 <p>
-                    BRIDGE (Brain Reconstruction Integrating Distributed Graph Estimates) is a distributed spatial graph framework for whole-brain structural connectivity, designed as an alternative to traditional tractography at terabyte scale.
+                    BRIDGE (Brain Reconstruction Integrating Distributed Graph Estimates) is a framework for whole-brain structural connectivity in terabyte-scale imaging.
                 </p>
                 <p>
                     It is developed principally for hierarchical phase-contrast X-ray tomography (HiP-CT) at the European Synchrotron, as part of the Human Organ Atlas and the CONNECTS Centre for Large-scale Imaging of Neural Circuits (LINC), but generalises to any high-resolution 3D brain volume.
                 </p>
                 <p>
-                    Every reconstruction is written to a <a href="#zarr-vectors">Zarr Vectors</a> store: an open, chunked, cloud-native format for points, streamlines and graphs. Results can be read, queried and visualised with open-source tools, independently of BRIDGE itself.
+                    Results are written to a <a href="#zarr-vectors">Zarr Vectors</a> store: an open, chunked, cloud-native format for points, streamlines and graphs. Results can be read, queried and visualised with open-source tools, independently of BRIDGE itself.
                 </p>
                 <div class="status-note">
                     <strong>Code availability.</strong> The BRIDGE source code is currently private ahead of publication. The data format and visualisation tools it is built on are open source and available now.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pipeline Section -->
-    <section id="pipeline">
-        <div class="container">
-            <div class="section-heading">
-                <h2>Pipeline</h2>
-                <p>From an OME-Zarr volume to a single graph store</p>
-            </div>
-
-            <div class="pipeline">
-                <div class="pipeline-step">
-                    <span class="pipeline-tag">GPU</span>
-                    <h3>Create vertices</h3>
-                    <p>Adaptively samples vertices in white matter and gives each an orientation from local structure tensors.</p>
-                </div>
-                <div class="pipeline-arrow" aria-hidden="true">→</div>
-                <div class="pipeline-step">
-                    <span class="pipeline-tag">GPU</span>
-                    <h3>Build graphs</h3>
-                    <p>Builds probabilistic spatial graphs within each chunk, with CUDA kernels for edge scoring, pruning and path tracing.</p>
-                </div>
-                <div class="pipeline-arrow" aria-hidden="true">→</div>
-                <div class="pipeline-step">
-                    <span class="pipeline-tag">CPU</span>
-                    <h3>Stitch network</h3>
-                    <p>Joins per-chunk fragments into whole chains across chunk boundaries, giving a whole-volume network.</p>
-                </div>
-                <div class="pipeline-arrow" aria-hidden="true">→</div>
-                <div class="pipeline-step pipeline-output">
-                    <span class="pipeline-tag">Output</span>
-                    <h3>graph.zarrvectors</h3>
-                    <p>One Zarr Vectors store per acquisition, alongside streamlines (.trk) and region-resolved connectivity.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features">
-        <div class="container">
-            <div class="section-heading">
-                <h2>Features</h2>
-                <p>Built for scale and reproducibility</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>GPU Accelerated</h3>
-                    <p>Vertex extraction and graph construction run on GPU through CUDA kernels and the RAPIDS stack (CuPy, cuGraph, cuDF).</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🧩</div>
-                    <h3>Chunked Processing</h3>
-                    <p>A divide-and-conquer approach handles volumes far larger than GPU memory, with fragments stitched across chunk boundaries.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📦</div>
-                    <h3>Zarr Vectors Native</h3>
-                    <p>Vertices, edges, fragments and chains live in one chunked, spatially indexed Zarr v3 store that other tools can open directly.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🔭</div>
-                    <h3>Multiscale</h3>
-                    <p>Couples reconstructions of the same specimen imaged at different resolutions, from whole-organ overviews to local zooms.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>BIDS Structured</h3>
-                    <p>Outputs are organised as BIDS derivative datasets built on OME-Zarr, and export to streamlines, adjacency matrices and GraphML.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🔬</div>
-                    <h3>Synchrotron Ready</h3>
-                    <p>Designed for HiP-CT, the Human Organ Atlas and CONNECTS-scale microscopy initiatives worldwide.</p>
                 </div>
             </div>
         </div>
@@ -180,10 +93,10 @@
                         Most Zarr data is a dense array, where the index into the array is the position in space. Zarr Vectors instead stores entities by their coordinates: point clouds, streamlines, graphs, skeletons and meshes. Stores are chunked in space, carry multiresolution pyramids and use OME-Zarr-compatible metadata.
                     </p>
                     <p>
-                        The specification was originally drafted by Forrest Collman at the Allen Institute. The BRIDGE team co-develops its Python implementation and tooling with the Allen Institute, driven by the needs of whole-brain fibre reconstruction.
+                        The specification was originally drafted by Forrest Collman at the Allen Institute. The BRIDGE team co-develops its Python implementation and tooling with the Allen Institute.
                     </p>
                     <p>
-                        BRIDGE writes each reconstruction to a <code>graph.zarrvectors</code> store inside the acquisition's OME-Zarr container. Anyone with the open tools below can load a region of a whole-brain network by bounding box, follow chains across chunks, or view it in Neuroglancer, without needing BRIDGE.
+                        BRIDGE writes its results as Zarr Vectors, so anyone with the open tools below can read and view them without BRIDGE.
                     </p>
                 </div>
                 <ul class="zv-links">
@@ -268,7 +181,7 @@
                         </ul>
                         <div class="project-links">
                             <a href="https://github.com/Andrew-Keenlyside/neuroglancer/tree/zarr_vectors_roi_store" class="project-link">Repository →</a>
-                            <a href="https://github.com/BRIDGE-Neuroscience/zv-ngtools" class="project-link">zv-ngtools →</a>
+                            <a href="https://github.com/Andrew-Keenlyside/zv-ngtools" class="project-link">zv-ngtools →</a>
                         </div>
                     </div>
                 </div>
@@ -276,19 +189,10 @@
                 <div class="project-card">
                     <div class="project-header">
                         <h3>BRIDGE</h3>
-                        <span class="project-lang">Python · CUDA · <span class="project-status">Release forthcoming</span></span>
+                        <span class="project-lang"><span class="project-status">Release forthcoming</span></span>
                     </div>
                     <div class="project-body">
-                        <p>The reconstruction pipeline. The source is private until publication; the documentation is public.</p>
-                        <ul class="project-features">
-                            <li>GPU vertex extraction and graph construction</li>
-                            <li>Whole-volume network stitch</li>
-                            <li>Tractogram and connectivity queries</li>
-                            <li>Writes Zarr Vectors graph stores</li>
-                        </ul>
-                        <div class="project-links">
-                            <a href="https://bridge-documentation.readthedocs.io/en/latest/" class="project-link">Docs →</a>
-                        </div>
+                        <p>Source private ahead of publication.</p>
                     </div>
                 </div>
             </div>
@@ -304,7 +208,6 @@
         </div>
         <div class="footer-links">
             <a href="https://github.com/BRIDGE-Neuroscience">GitHub</a>
-            <a href="https://bridge-documentation.readthedocs.io/en/latest/">Documentation</a>
             <a href="https://alleninstitute.github.io/zarr_vectors/">Zarr Vectors</a>
         </div>
         <p class="footer-text">
